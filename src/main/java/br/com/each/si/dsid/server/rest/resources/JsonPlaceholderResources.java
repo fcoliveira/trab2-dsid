@@ -1,5 +1,7 @@
 package br.com.each.si.dsid.server.rest.resources;
 
+import java.io.IOException;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,7 +10,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.each.si.dsid.server.controller.ServerController;
+import br.com.each.si.dsid.server.model.Comment;
 import io.swagger.annotations.Api;
 
 @Path("/dsid/jsonplaceholder")
@@ -16,6 +23,8 @@ import io.swagger.annotations.Api;
 public class JsonPlaceholderResources {
 
 	private ServerController controller;
+	private static final Logger LOGGER = LoggerFactory.getLogger(JsonPlaceholderResources.class);
+	
 	public JsonPlaceholderResources(ServerController controller) {
 		this.controller = controller;
 	}
@@ -24,14 +33,26 @@ public class JsonPlaceholderResources {
 	@Path("/comments")
 	public Response get() {
 		
-		return Response.status(Status.NOT_IMPLEMENTED).build();
+		try {
+			JSONArray comments = this.controller.getComments();
+			return Response.ok(comments.toString()).build();
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.NOT_IMPLEMENTED).build();
+		}
 	}
 	
 	@POST
 	@Path("/comments")
-	public Response post() {
+	public Response post(Comment comment) {
 		
-		return Response.status(Status.NOT_IMPLEMENTED).build();
+		try {
+			String responseContent = this.controller.postComment(comment);
+			return Response.ok(responseContent).build();
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 	@PUT
