@@ -58,7 +58,7 @@ public class JsonPlaceholderHttpHandler {
 		HttpURLConnection conn = (HttpURLConnection) restServiceUrl.openConnection();
 		conn.setDoOutput(true);
 		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
 		OutputStream os = conn.getOutputStream();
 		os.write(commentAsString.getBytes());
@@ -82,11 +82,11 @@ public class JsonPlaceholderHttpHandler {
 	public String updateComment(Comment comment) throws IOException {
 
 		String commentAsString = new ObjectMapper().writeValueAsString(comment);
-		HttpURLConnection conn = (HttpURLConnection) restServiceUrl.openConnection();
+		URL url = new URL(SERVICE_URL + comment.getId()); 
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setDoOutput(true);
 		conn.setRequestMethod("PUT");
-		conn.setRequestProperty("Content-Type", "application/json");
-
+		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 		OutputStream os = conn.getOutputStream();
 		os.write(commentAsString.getBytes());
 		os.flush();
@@ -112,7 +112,6 @@ public class JsonPlaceholderHttpHandler {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setDoOutput(true);
 		conn.setRequestMethod("DELETE");
-		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		conn.connect();
 
 		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
