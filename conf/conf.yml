@@ -1,0 +1,25 @@
+server:
+  gzip:
+    enabled: true
+    compressedMimeTypes: [text/css, application/javascript, image/svg+xml]
+  adminMinThreads: 1
+  adminMaxThreads: 64
+  adminContextPath: /
+  applicationContextPath: /
+  applicationConnectors:
+    - type: http
+      port: 8081
+  adminConnectors:
+    - type: http
+      port: 8082
+  requestLog:
+    appenders:
+      - type: file
+        threshold: ALL
+        currentLogFilename: ativ2-dsid.log
+        archivedLogFilenamePattern: ativ2-dsid-%d{yyyy-MM-dd}.log
+        archivedFileCount: 7
+        timeZone: UTC
+
+swagger:
+  resourcePackage: br.com.each.si.dsid.server.rest.resources
