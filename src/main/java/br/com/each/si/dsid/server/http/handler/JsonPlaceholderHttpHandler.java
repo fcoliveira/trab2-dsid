@@ -16,7 +16,7 @@ import br.com.each.si.dsid.server.model.Comment;
 
 public class JsonPlaceholderHttpHandler {
 
-	private static final String SERVICE_URL = "https://jsonplaceholder.typicode.com/comments";
+	private static final String SERVICE_URL = "https://jsonplaceholder.typicode.com/comments/";
 	private URL restServiceUrl;
 
 	public JsonPlaceholderHttpHandler() throws MalformedURLException {
@@ -64,9 +64,7 @@ public class JsonPlaceholderHttpHandler {
 		os.write(commentAsString.getBytes());
 		os.flush();
 
-		if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-			throw new IOException("Connection failed. HTTP code : " + conn.getResponseCode());
-		}
+		conn.connect();
 
 		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
@@ -81,14 +79,53 @@ public class JsonPlaceholderHttpHandler {
 		return sb.toString();
 	}
 
-	public boolean updateComment(String commentId) {
+	public String updateComment(Comment comment) throws IOException {
 
-		return false;
+		String commentAsString = new ObjectMapper().writeValueAsString(comment);
+		HttpURLConnection conn = (HttpURLConnection) restServiceUrl.openConnection();
+		conn.setDoOutput(true);
+		conn.setRequestMethod("PUT");
+		conn.setRequestProperty("Content-Type", "application/json");
+
+		OutputStream os = conn.getOutputStream();
+		os.write(commentAsString.getBytes());
+		os.flush();
+		
+		conn.connect();
+
+		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+		String output;
+		StringBuilder sb = new StringBuilder();
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+
+		conn.disconnect();
+
+		return sb.toString();
 	}
 
-	public boolean deleteComment(String commentId) {
+	public String deleteComment(int commentId) throws IOException {
 
-		return false;
+		URL url = new URL(SERVICE_URL + commentId); 
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
+		conn.setRequestMethod("DELETE");
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		conn.connect();
+
+		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+		String output;
+		StringBuilder sb = new StringBuilder();
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+
+		conn.disconnect();
+
+		return sb.toString();
 	}
 
 }

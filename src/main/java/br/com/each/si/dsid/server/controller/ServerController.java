@@ -31,11 +31,21 @@ public class ServerController {
 
 	}
 
+	public String deleteComment(int commentId) throws IOException {
+		
+		return jsonPlaceholderHttpHandler.deleteComment(commentId);
+	}
+	
 	public String postComment(Comment comment) throws IOException {
 
 		return jsonPlaceholderHttpHandler.postComment(comment);
 	}
 
+	public String updateComment(Comment comment) throws IOException {
+		
+		return jsonPlaceholderHttpHandler.updateComment(comment);
+	}
+	
 	public JSONArray getComments() throws IOException {
 
 		return jsonPlaceholderHttpHandler.getComments();

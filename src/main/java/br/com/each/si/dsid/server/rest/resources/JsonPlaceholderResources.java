@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -38,7 +39,7 @@ public class JsonPlaceholderResources {
 			return Response.ok(comments.toString()).build();
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
-			return Response.status(Status.NOT_IMPLEMENTED).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
 	
@@ -51,21 +52,33 @@ public class JsonPlaceholderResources {
 			return Response.ok(responseContent).build();
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
 	
 	@PUT
 	@Path("/comments")
-	public Response put() {
+	public Response put(Comment comment) {
 		
-		return Response.status(Status.NOT_IMPLEMENTED).build();
+		try {
+			String responsePayload = this.controller.updateComment(comment);
+			return Response.ok(responsePayload).build();
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+			}
 	}
 	
 	@DELETE
-	@Path("/comments")
-	public Response delete() {
+	@Path("/comments/{commentId}")
+	public Response delete(@PathParam(value = "commentId") int commentId) {
 		
-		return Response.status(Status.NOT_IMPLEMENTED).build();
+		try {
+			String responsePayload = this.controller.deleteComment(commentId);
+			return Response.ok(responsePayload).build();
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+		}
 	}
 }
