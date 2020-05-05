@@ -28,9 +28,6 @@ public class App extends Application<Config> {
 		serverConfig[0] = "server";
 		serverConfig[1] = dir + "/conf.yml";
 		
-//		String path = App.class.getResource("conf.yml").getPath();
-//		serverConfig[1] = 
-
 		new App().run(serverConfig);
 	}
 	
