@@ -26,11 +26,14 @@ public class App extends Application<Config> {
 		
 		String[] serverConfig = new String[2];
 		serverConfig[0] = "server";
-		serverConfig[1] = dir + "/conf/conf.yml";
+		serverConfig[1] = dir + "/conf.yml";
+		
+//		String path = App.class.getResource("conf.yml").getPath();
+//		serverConfig[1] = 
 
 		new App().run(serverConfig);
 	}
-
+	
 	@Override
 	public String getName() {
 		return "Atividade 2 - Parte 1 - DSID";

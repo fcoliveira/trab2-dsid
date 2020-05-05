@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.each.si.dsid.server.controller.ServerController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Path("/dsid/opensky")
 @Api("API REST OpenSky")
@@ -27,6 +28,7 @@ public class OpenSkyResources {
 
 	@GET
 	@Path("/states")
+	@ApiOperation("Obtem as aeronaves sobrevoando o Brasil no momento. Obtido de: https://opensky-network.org/apidoc/")
 	public Response getOpenSky() {
 
 		try {
@@ -34,7 +36,7 @@ public class OpenSkyResources {
 			return Response.ok(response.toString()).build();
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
-			return Response.status(Status.NOT_IMPLEMENTED).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 
 	}
