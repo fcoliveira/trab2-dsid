@@ -8,7 +8,7 @@ server:
   applicationContextPath: /
   applicationConnectors:
     - type: http
-      port: @{PORT}
+      port: 8080
   requestLog:
     appenders:
       - type: file
